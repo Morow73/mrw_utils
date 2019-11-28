@@ -12,13 +12,13 @@ as well as a vest bullet
 
 [FR]
 Vous permettra de recharger vos armes avec certains type de munition 
-Ainsi qu'un gilet par balle ( Le pourcentage de déstruction du gilet est save dans un fichier json . Le gilet est détruit si il est inférieur a 10%)
+Ainsi qu'un gilet par balle ( Le pourcentage de dÃ©struction du gilet est save dans un fichier json . Le gilet est dÃ©truit si il est infÃ©rieur a 10%)
 
 [REQUIEREMENTS]
 
-# Es_extended
-# Skinchanger
-# ESX_skin
+- Es_extended
+- Skinchanger
+- ESX_skin
 
 [INSTAL]
 
