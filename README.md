@@ -1,7 +1,7 @@
 # mrw_utils
 
 simple resource for 
-bproof and ammobox for esx
+bullet vest and ammobox for esx
 
 [INFORMATION]
 
