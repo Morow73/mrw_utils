@@ -81,30 +81,32 @@ AddEventHandler('mrw_utils:SaveBproof', function(val)
 
 	local loadFile = LoadResourceFile(GetCurrentResourceName(), "./server/SaveBproof.json") 
 	LoadBproof = json.decode(loadFile)
+	
+	if #LoadBproof == 0 then -- if table is empty
+            insert = true
+	end 
 
 	for i,v in ipairs(LoadBproof) do
 
 		if id == v.users then
-		    table.remove(LoadBproof, i) 
-		    print('remove')
-		    insert = true
+		   if tonumber(val) == 0 then 
+	              table.remove(LoadBproof, i) 
+                   else 
+	              table.remove(LoadBproof, i) 
+		      insert = true
+		   end    
 		else 
 		    insert = true     
 		end 
 	end
     
-    if #LoadBproof == 0 then -- if table is empty
-        insert = true
-    end    	
-
 	if insert then 
-		print('insert')
-		table.insert(LoadBproof, {
+	   table.insert(LoadBproof, {
 	      users = id,
 	      value = val
 	    }) 
-    end		
-	SaveResourceFile(GetCurrentResourceName(), "./server/SaveBproof.json", json.encode(LoadBproof, {indent=true}), -1)  
+        end		
+   SaveResourceFile(GetCurrentResourceName(), "./server/SaveBproof.json", json.encode(LoadBproof, {indent=true}), -1)  
 end)	
 
 function LoadJson(_source, identifier)
