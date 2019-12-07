@@ -1,5 +1,6 @@
 ESX = nil
- 
+local insert = false 
+
 TriggerEvent('esx:getSharedObject', function( obj ) ESX = obj end)
 
 ESX.RegisterUsableItem('box_9mm', function(source)
@@ -59,18 +60,16 @@ AddEventHandler('mrw_utils:ReturnIsNotValid', function(type)
 
     if type == '9 mm' then
 	    xPlayer.addInventoryItem('box_9mm', 1)	
-	elseif type == '12 mm' then
+   elseif type == '12 mm' then
 	    xPlayer.addInventoryItem('box_12mm', 1)	
     elseif type == '.45 ACP' then
 	    xPlayer.addInventoryItem('box_.45ACP', 1)	
-	elseif type == '7.62 mm' then
+    elseif type == '7.62 mm' then
 	    xPlayer.addInventoryItem('box_7.62mm', 1)
     elseif type == '357 Magnum' then
 	    xPlayer.addInventoryItem('box_357Magnum', 1)
-	end	
+    end	
 end)
-
-local insert = false
 
 RegisterServerEvent('mrw_utils:SaveBproof')
 AddEventHandler('mrw_utils:SaveBproof', function(val)
@@ -87,7 +86,6 @@ AddEventHandler('mrw_utils:SaveBproof', function(val)
 	end 
 
 	for i,v in ipairs(LoadBproof) do
-
 		if id == v.users then
 		   if tonumber(val) == 0 then 
 	              table.remove(LoadBproof, i) 
@@ -115,26 +113,24 @@ function LoadJson(_source, identifier)
 	LoadBproof = json.decode(loadFile)
 
 	for i,v in ipairs(LoadBproof) do
-
-		if id == v.users then 
-			Armour =  v.value
-			if Armour ~= nil then 
-               Armour = Armour
-               Bproof = true
-	        end 
+	    if id == v.users then 
+	        Armour =  v.value
+		if Armour ~= nil then 
+		   Armour = Armour
+		   Bproof = true
+		end 
 	    else 
-            Armour = 100   
-            Bproof = true     
+		Armour = 100   
+		Bproof = true     
 	    end
-    end 
+        end 
 
-    if #LoadBproof == 0 then -- if table is empty
-    	Armour = 100
-    	Bproof = true
-    end
+        if #LoadBproof == 0 then -- if table is empty
+    	    Armour = 100
+    	    Bproof = true
+        end
     	
 	if Bproof then 
 	    TriggerClientEvent('mrw_utils:bproof', _source, Armour)
-	    print(Armour) 
 	end    
 end
