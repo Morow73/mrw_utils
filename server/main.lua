@@ -1,5 +1,6 @@
 ESX = nil
-local insert = false 
+local insert, found = false, false
+
 
 TriggerEvent('esx:getSharedObject', function( obj ) ESX = obj end)
 
@@ -42,7 +43,7 @@ ESX.RegisterUsableItem('bulletproof', function(source)
 	local _source  = source
 	local xPlayer  = ESX.GetPlayerFromId(_source)
   
-    LoadJson(_source, xPlayer.identifier)
+    LoadJson(_source)
 end)
 -------
 
@@ -74,63 +75,56 @@ end)
 RegisterServerEvent('mrw_utils:SaveBproof')
 AddEventHandler('mrw_utils:SaveBproof', function(val)
 
-    local _source = source
+        local _source = source
 	local xPlayer = ESX.GetPlayerFromId(_source)
 	local id = xPlayer.identifier
 
 	local loadFile = LoadResourceFile(GetCurrentResourceName(), "./server/SaveBproof.json") 
 	LoadBproof = json.decode(loadFile)
-	
-	if #LoadBproof == 0 then -- if table is empty
-            insert = true
-	end 
 
 	for i,v in ipairs(LoadBproof) do
-		if id == v.users then
-		   if tonumber(val) == 0 then 
-	              table.remove(LoadBproof, i) 
-                   else 
-	              table.remove(LoadBproof, i) 
-		      insert = true
-		   end    
-		else 
-		    insert = true     
+		if v.users == id then
+			if tonumber(val) == 0 then 
+				table.remove(LoadBproof, i)
+            else 
+			    v.value = val
+			end    
 		end 
 	end
-    
-	if insert then 
-	   table.insert(LoadBproof, {
-	      users = id,
-	      value = val
-	    }) 
-        end		
-   SaveResourceFile(GetCurrentResourceName(), "./server/SaveBproof.json", json.encode(LoadBproof, {indent=true}), -1)  
+	SaveResourceFile(GetCurrentResourceName(), "./server/SaveBproof.json", json.encode(LoadBproof, {indent=true}), -1)  
 end)	
+	
 
-function LoadJson(_source, identifier)
-	local id = identifier
+function LoadJson(_source)
+
+	local xPlayer  = ESX.GetPlayerFromId(_source)
+        local identifier = xPlayer.identifier
 	local loadFile = LoadResourceFile(GetCurrentResourceName(), "./server/SaveBproof.json") 
 	LoadBproof = json.decode(loadFile)
 
-	for i,v in ipairs(LoadBproof) do
-	    if id == v.users then 
-	        Armour =  v.value
-		if Armour ~= nil then 
-		   Armour = Armour
-		   Bproof = true
-		end 
-	    else 
-		Armour = 100   
-		Bproof = true     
-	    end
-        end 
+	if #LoadBproof == 0 then 
+	   table.insert(LoadBproof, {
+	       users = identifier,
+	       value = 100
+	    })
+	  insert = true
+	  TriggerClientEvent('mrw_utils:bproof', _source, 100)
+	end
 
-        if #LoadBproof == 0 then -- if table is empty
-    	    Armour = 100
-    	    Bproof = true
-        end
-    	
-	if Bproof then 
-	    TriggerClientEvent('mrw_utils:bproof', _source, Armour)
-	end    
+	for i,v in ipairs(LoadBproof) do
+		if v.users == identifier then
+		    found = true 
+		    TriggerClientEvent('mrw_utils:bproof', _source, v.value)	
+		end
+	end
+
+	if not found and not insert then 
+	   table.insert(LoadBproof, {
+	       users = identifier,
+	       value = 100
+	    })
+	   TriggerClientEvent('mrw_utils:bproof', _source, 100)
+	end
+
+	SaveResourceFile(GetCurrentResourceName(), "./server/SaveBproof.json", json.encode(LoadBproof, {indent=true}), -1)    
 end
